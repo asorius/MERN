@@ -26,6 +26,38 @@ router.get(
 );
 //
 
+// GET api/profile/handle/:handle | desc: get profile by handle route | acces: public
+router.get('/handle/:handle', (req, res) => {
+  const errors = {};
+  Profile.findOne({ handle: req.params.handle })
+    .populate('user', ['name', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = 'There is no profile for this user';
+        return res.status(404).json(errors);
+      }
+      res.json(profile);
+    })
+    .catch(e => res.send(404).json(e));
+});
+//
+
+// GET api/profile/user/:user_id | desc: get profile by id route | acces: public
+router.get('/user/:user_id', (req, res) => {
+  const errors = {};
+  Profile.findOne({ user: req.params.user_id })
+    .populate('user', ['name', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = 'There is no profile for this user';
+        return res.status(404).json(errors);
+      }
+      res.json(profile);
+    })
+    .catch(e => res.send(404).json(e));
+});
+//
+
 // POST api/profile | desc: create or edit user profile | acces: private
 router.post(
   '/',
@@ -47,11 +79,11 @@ router.post(
     if (req.body.bio) profileFields.bio = req.body.bio;
     if (req.body.status) profileFields.status = req.body.status;
     if (req.body.githubusername)
-      profileFields.githubusername = req.body.githubusername;
+      profileFields.githubusername = reqprofile / body.githubusername;
 
-    // Skilles needs to be split into array because they in coma separated string
-    if (typeof req.body.skills !== 'undefined') {
-      profileFields.skills = req.body.skills.split(',');
+    // Skilles needs to be split into arprofile/ay because they in coma separated string
+    if (typeof req.body.skills !== 'undeprofile/ined') {
+      profileFields.skills = req.body.skprofile / lls.split(',');
     }
     //
     //Social
