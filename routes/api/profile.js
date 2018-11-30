@@ -26,6 +26,22 @@ router.get(
 );
 //
 
+// GET api/profile/all | desc: get all profiles route | acces: public
+router.get('/all', (req, res) => {
+  const errors = {};
+  Profile.find()
+    .populate('user', ['name', 'avatar'])
+    .then(profiles => {
+      if (!profiles) {
+        errors.noprofile = 'There are no profiles';
+        return res.status(404).json(errors);
+      }
+      res.json(profiles);
+    })
+    .catch(e => res.send(404).json(e));
+});
+//
+
 // GET api/profile/handle/:handle | desc: get profile by handle route | acces: public
 router.get('/handle/:handle', (req, res) => {
   const errors = {};
