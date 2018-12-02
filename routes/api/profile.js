@@ -97,11 +97,11 @@ router.post(
     if (req.body.bio) profileFields.bio = req.body.bio;
     if (req.body.status) profileFields.status = req.body.status;
     if (req.body.githubusername)
-      profileFields.githubusername = reqprofile / body.githubusername;
+      profileFields.githubusername = req.body.githubusername;
 
     // Skilles needs to be split into arprofile/ay because they in coma separated string
     if (typeof req.body.skills !== 'undeprofile/ined') {
-      profileFields.skills = req.body.skprofile / lls.split(',');
+      profileFields.skills = req.body.skills.split(',');
     }
     //
     //Social
@@ -183,4 +183,61 @@ router.post(
 );
 //
 
+// DELETE api/profile/experience/:exp_id | desc: delete experience from a profile | acces: private
+router.delete(
+  '/experience/:exp_id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        // Get remove index
+        const removeIndex = profile.experience
+          .map(item => item.id)
+          .indexOf(req.params.exp_id);
+
+        // Splice out of array
+        profile.experience.splice(removeIndex, 1);
+
+        // Save
+        profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+//
+// DELETE api/profile/education/:edu_id | desc: delete education from a profile | acces: private
+router.delete(
+  '/education/:edu_id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        // Get remove index
+        const removeIndex = profile.education
+          .map(item => item.id)
+          .indexOf(req.params.edu_id);
+
+        // Splice out of array
+        profile.education.splice(removeIndex, 1);
+
+        // Save
+        profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+//
+//DELETE api/profile | desc: delete profile | acces: private
+router.delete(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id }).then(() => {
+      User.findOneAndRemove({ _id: req.user.id }).then(() =>
+        res.json({ success: true })
+      );
+    });
+  }
+);
+//
 module.exports = router;
