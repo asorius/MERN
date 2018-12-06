@@ -13,7 +13,7 @@ export const registerUser = (userData, history) => dispatch => {
 
 //Login
 
-export const loginUser = (userData, history) => dispatch => {
+export const loginUser = userData => dispatch => {
   axios
     .post('/api/users/login', userData)
     .then(res => {
@@ -31,18 +31,15 @@ export const loginUser = (userData, history) => dispatch => {
 export const setCurrentUser = decoded => {
   return {
     type: SET_CURRENT_USER,
-    paylaod: decoded
+    payload: decoded
   };
 };
-//   try {
-//     const response = await fetch('/api/users/register', {
-//       method: 'POST',
-//       body: JSON.stringify(userData),
-//       headers: {
-//         'Content-Type': 'application/json'
-//       }
-//     });
-//     const newUser = await response.json();
-//   } catch (e) {
-//     dispatch({ type: GET_ERRORS, payload: e.response.data });
-//   }
+// Log user out
+export const logoutUser = () => dispatch => {
+  // Remove token from localStorage
+  localStorage.removeItem('token');
+  // Remove auth header for future requests
+  setAuthToken(false);
+  // Set current user to {} which will set isAuthenticated to false
+  dispatch(setCurrentUser({}));
+};
