@@ -15,20 +15,21 @@ import Landing from './components/layout/Landing';
 //dynamic components
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import setAuthToken from './utils/setAuthToken';
-import { decode } from 'punycode';
+import Dashboard from './components/dashboard/Dashboard';
+import { clearProfile } from './actions/profileActions';
 //
 
 //check for token
 if (localStorage.token) {
   //set auth token header auth
-  setAuthToken(localStorage.token);
+  SetAuthToken(localStorage.token);
   const decoded = jwt_decode(localStorage.token);
   //set user and autheticate it
   store.dispatch(setCurrentUser(decoded));
   const currentTime = Date.now() / 1000;
-  if (decode.exp < currentTime) {
+  if (decoded.exp < currentTime) {
     store.dispatch(setCurrentUser(decoded));
+    store.dispatch(clearProfile());
     window.location.href = '/login';
   }
 }
@@ -43,6 +44,7 @@ class App extends Component {
             <div className="container">
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <Route exact path="/dashboard" component={Dashboard} />
             </div>
 
             <Footer />

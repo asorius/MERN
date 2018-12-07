@@ -39,7 +39,7 @@ class Landing extends Component {
 }
 
 Landing.propTypes = {
-  auth: PropTypes.object.required
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
