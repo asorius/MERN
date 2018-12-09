@@ -2,7 +2,8 @@ import {
   GET_PROFILE,
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
-  GET_ERRORS
+  GET_ERRORS,
+  SET_CURRENT_USER
 } from './types';
 import axios from 'axios';
 // import jwt_decode from 'jwt-decode';
@@ -35,7 +36,15 @@ export const createProfile = (data, history) => dispatch => {
       })
     );
 };
-
+//CLEAR PROFILE
+export const deleteAccount = () => dispatch => {
+  if (window.confirm('Are you sure You want to delete?')) {
+    axios
+      .delete('/api/profile')
+      .then(res => dispatch({ type: SET_CURRENT_USER, payload: {} }))
+      .catch(e => dispatch({ type: GET_ERRORS, payload: e.response.data }));
+  }
+};
 //CLEAR PROFILE
 export const clearProfile = () => {
   return {
