@@ -1,9 +1,4 @@
-import {
-  GET_PROFILE,
-  GET_ERRORS,
-  PROFILE_LOADING,
-  CLEAR_CURRENT_PROFILE
-} from './types';
+import { GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE } from './types';
 import axios from 'axios';
 // import jwt_decode from 'jwt-decode';
 
