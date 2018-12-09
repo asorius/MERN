@@ -5,8 +5,10 @@ import TextFieldGroup from '../common/TextFieldGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import InputGroup from '../common/InputGroup';
 import SelectListGroup from '../common/SelectListGroup';
-import { createProfile } from '../../actions/profileActions';
-class CreateProfile extends Component {
+import { createProfile, getCurrentProfile } from '../../actions/profileActions';
+import isEmpty from '../../validation/is-empty';
+
+class EditProfile extends Component {
   state = {
     displaySocialInputs: false,
     handle: '',
@@ -24,20 +26,64 @@ class CreateProfile extends Component {
     instagram: '',
     errors: {}
   };
+
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  componentDidMount() {
+    this.props.getCurrentProfile();
+    const hasProfile = !isEmpty(this.props.profile.profile);
+    if (hasProfile) {
+      const profile = this.props.profile.profile;
+      // bring skills array back to csv
+      const skillsCSV = Array.isArray(profile.skills)
+        ? profile.skills.join(', ')
+        : profile.skills;
+      // if profile field doesnt exist, make empty string
+      profile.company = !isEmpty(profile.company) ? profile.company : '';
+      profile.website = !isEmpty(profile.website) ? profile.website : '';
+      profile.location = !isEmpty(profile.location) ? profile.location : '';
+      profile.githubusername = !isEmpty(profile.githubusername)
+        ? profile.githubusername
+        : '';
+      profile.bio = !isEmpty(profile.bio) ? profile.bio : '';
+      profile.social = !isEmpty(profile.social) ? profile.social : {};
+      profile.twitter = !isEmpty(profile.social.twitter)
+        ? profile.social.twitter
+        : '';
+      profile.linkedin = !isEmpty(profile.social.linkedin)
+        ? profile.social.linkedin
+        : '';
+      profile.youtube = !isEmpty(profile.social.youtube)
+        ? profile.social.youtube
+        : '';
+      profile.instagram = !isEmpty(profile.social.instagram)
+        ? profile.social.instagram
+        : '';
+      profile.skills = skillsCSV;
+      this.setState({
+        handle: profile.handle,
+        status: profile.status,
+        company: profile.company,
+        website: profile.website,
+        location: profile.location,
+        githubusername: profile.githubusername,
+        bio: profile.bio,
+        social: profile.social,
+        twitter: profile.twitter,
+        linkedin: profile.linkedin,
+        youtube: profile.youtube,
+        instagram: profile.instagram,
+        skills: profile.skills
+      });
+    }
+  }
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.errors) {
       return { errors: nextProps.errors };
     }
     return null;
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.errors !== this.props.errors) {
-      this.setState({ errors: this.props.errors });
-    }
   }
   onSubmit = e => {
     e.preventDefault();
@@ -56,6 +102,7 @@ class CreateProfile extends Component {
       youtube: this.state.youtube,
       instagram: this.state.instagram
     };
+    console.log('submit');
     this.props.createProfile(profileData, this.props.history);
   };
   render() {
@@ -131,10 +178,8 @@ class CreateProfile extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 md-auto">
-              <h1 className="display-4 text-center">Create Your Profile</h1>
-              <p className="lead text-center">
-                Let's get some information to make your profile stand out
-              </p>
+              <h1 className="display-4 text-center">Edit Your Profile</h1>
+
               <small className="d-block pb-3">* = required fields</small>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
@@ -231,10 +276,11 @@ class CreateProfile extends Component {
     );
   }
 }
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  createProfile: PropTypes.func.isRequired
+  createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -243,5 +289,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { createProfile }
-)(CreateProfile);
+  { createProfile, getCurrentProfile }
+)(EditProfile);
