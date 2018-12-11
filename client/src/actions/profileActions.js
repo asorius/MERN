@@ -36,7 +36,33 @@ export const createProfile = (data, history) => dispatch => {
       })
     );
 };
-//CLEAR PROFILE
+
+//ADD EXPERIENCE
+export const addExperience = (data, history) => dispatch => {
+  axios
+    .post('/api/profile/experience', data)
+    .then(res => history.push('/dashboard'))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+//ADD EDUCATION
+export const addEducation = (data, history) => dispatch => {
+  axios
+    .post('/api/profile/education', data)
+    .then(res => history.push('/dashboard'))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+//DELETE PROFILE
 export const deleteAccount = () => dispatch => {
   if (window.confirm('Are you sure You want to delete?')) {
     axios
