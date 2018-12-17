@@ -23,6 +23,8 @@ import EditProfile from './components/edit-profile/EditProfile';
 import AddExperience from './components/add-credentials/AddExperience';
 import AddEducation from './components/add-credentials/AddEducation';
 import Profiles from './components/profiles/Profiles';
+import Profile from './components/profile/Profile';
+import NotFound from './components/notfound/NotFound';
 //
 
 //check for token
@@ -52,6 +54,7 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/profiles" component={Profiles} />
+              <Route exact path="/profile/:handle" component={Profile} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute
                 exact
@@ -74,6 +77,7 @@ class App extends Component {
                 component={AddEducation}
               />
             </div>
+            <Route exact path="/notfound" component={NotFound} />
 
             <Footer />
           </div>
