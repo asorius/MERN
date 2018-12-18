@@ -82,7 +82,7 @@ router.post(
         .then(post => {
           // Check for post owner
           if (
-            post.likes.filter(like => like.user.toString() === req.user)
+            post.likes.filter(like => like.user.toString() === req.user.id)
               .length > 0
           ) {
             return res
