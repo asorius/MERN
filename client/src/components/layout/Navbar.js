@@ -27,6 +27,7 @@ class Navbar extends Component {
           </Link>
         </li>
         <li className="nav-item">
+          {/* eslint-disable-next-line */}
           <a href="" className="nav-link" onClick={this.onLogoutClick}>
             <img
               className="rounded-circle"

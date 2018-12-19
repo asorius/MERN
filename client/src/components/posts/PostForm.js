@@ -33,6 +33,11 @@ class PostForm extends Component {
       this.setState({ errors: this.props.errors });
     }
   }
+  // componentWillReceiveProps(newProps) {
+  //   if (newProps.errors) {
+  //     this.setState({ errors: newProps.errors });
+  //   }
+  // }
   render() {
     const { errors } = this.state;
 

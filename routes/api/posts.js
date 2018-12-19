@@ -26,7 +26,7 @@ router.post(
     newPost
       .save()
       .then(post => res.json(post))
-      .catch(e => res.json(e));
+      .catch(e => res.json({ postcreationerror: 'post could not be created' }));
   }
 );
 //
